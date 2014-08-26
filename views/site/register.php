@@ -6,16 +6,16 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = 'Login';
+$this->title = 'Register';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
+<div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+    <p>Please fill out the following fields to register:</p>
 
     <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
+        'id' => 'register-form',
         'options' => ['class' => 'form-horizontal'],
         'fieldConfig' => [
             'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
@@ -23,18 +23,16 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'username')->label('Name or Email') ?>
-
+    <?= $form->field($model, 'name') ?>
+    <?= $form->field($model, 'email')->input('email') ?>
     <?= $form->field($model, 'password')->passwordInput() ?>
+    <?= $form->field($model, 'passwordConfirmation')->passwordInput() ?>
 
-    <?= $form->field($model, 'rememberMe', [
-        'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-    ])->checkbox() ?>
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?> or
-            <?= Html::a('Reigster', 'register'); ?> 
+            <?= Html::submitButton('Register', ['class' => 'btn btn-success', 'name' => 'register-button']) ?> or
+            <?= Html::a('Go Back', 'login'); ?> 
         </div>
     </div>
 
