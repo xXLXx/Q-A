@@ -89,3 +89,76 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+.bs-example {
+    position: relative;
+    padding: 45px 15px 15px;
+    margin: 0 -15px 15px;
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-width: 1px 0;
+    -webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, .05);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, .05)
+}
+.bs-example:after {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #959595;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    content: "Questions"
+}
+.bs-example+.highlight {
+    margin: -15px -15px 15px;
+    border-width: 0 0 1px;
+    border-radius: 0
+}
+@media (min-width: 768px) {
+    .bs-example {
+        margin-right: 0;
+        margin-left: 0;
+        background-color: #fff;
+        border-color: #ddd;
+        border-width: 1px;
+        border-radius: 4px 4px 0 0;
+        -webkit-box-shadow: none;
+        box-shadow: none
+   }
+   .bs-example+.highlight {
+       margin-top: -16px;
+       margin-right: 0;
+       margin-left: 0;
+       border-width: 1px;
+       border-bottom-right-radius: 4px;
+       border-bottom-left-radius: 4px
+  }
+}
+.highlight {
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    border-radius: 4px
+}
+.bs-example .btn-top-right{
+    float: right;
+    background-color: transparent;
+    border-color: #e1e1e8;
+    color: #777;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.bs-example .btn-top-right:hover{
+    float: right;
+    background-color: #563d7c;
+    border-color: #563d7c;
+    color: #EEE;
+}

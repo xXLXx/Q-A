@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'username')->label('Name or Email') ?>
+    <?= $form->field($model, 'name')->label('Name or Email') ?>
 
     <?= $form->field($model, 'password')->passwordInput() ?>
 
