@@ -9,6 +9,8 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\RegisterForm;
 use app\models\ContactForm;
+use app\models\User;
+use yii\data\ActiveDataProvider;
 
 class SiteController extends Controller
 {
@@ -59,7 +61,8 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        $model = new LoginForm();
+        $model = new User();
+        $model->scenario = 'login';
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
@@ -70,7 +73,8 @@ class SiteController extends Controller
     }
 
     public function actionRegister(){
-        $model = new RegisterForm();
+        $model = new User();
+        $model->scenario = 'register';
         if ($model->load(Yii::$app->request->post()) && $model->register()) {
             return $this->goBack();
         } else {
@@ -104,5 +108,36 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionNewest(){
+        $menu = 'newest';
+        // $dataProvider = new ActiveDataProvider([
+        //     'query' => Question::find(),
+        //     'pagination' => [
+        //         'pageSize' => 20,
+        //     ],
+        // ]);
+        return $this->render('index', compact('menu', 'dataProvider'));
+    }
+
+    public function actionFeatured(){
+        $menu = 'featured';
+        return $this->render('index', compact('menu'));
+    }
+
+    public function actionFrequent(){
+        $menu = 'frequent';
+        return $this->render('index', compact('menu'));
+    }
+
+    public function actionTags(){
+        $menu = 'tags';
+        return $this->render('index', compact('menu'));
+    }
+
+    public function actionUnanswered(){
+        $menu = 'unanswered';
+        return $this->render('index', compact('menu'));
     }
 }

@@ -6,8 +6,11 @@ use Yii;
 
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-    public $authKey;
-    
+    public $password_repeat;
+    public $rememberMe = true;
+
+    private $_user = false;
+
     public static function tableName(){
         return '{{%users}}';
     }
@@ -54,7 +57,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->authKey;
+        return $this->auth_key;
     }
 
     /**
@@ -66,13 +69,77 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
-     * Validates password
-     *
-     * @param  string  $password password to validate
-     * @return boolean if password provided is valid for current user
+    * Register Functions
+    */
+    /**
+     * @return array the validation rules.
      */
-    public function validatePassword($password)
+    public function rules()
     {
-        return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+        return [
+            // username and password are both required
+            [['name', 'password'], 'required'],
+            ['email', 'email'],
+            ['password', 'validatePassword', 'on' => 'login'],
+            ['password_repeat', 'compare', 'compareAttribute' => 'password'],
+            [['password_repeat', 'email'], 'required', 'on' => 'register'],
+            ['rememberMe', 'boolean'],
+            ['rememberMe', 'required', 'on' => 'login'],
+            [['name', 'email'], 'unique', 'on' => 'register'],
+        ];
+    }
+
+    /**
+     * Logs in a user using the provided username and password.
+     * @return boolean whether the user is logged in successfully
+     */
+    public function register()
+    {
+        if ($this->validate()) {
+            $model = new User([
+                'name'      => ucwords($this->name),
+                'email'     => $this->email,
+                'password'  => Yii::$app->getSecurity()->generatePasswordHash($this->password),
+            ]);
+
+            if ($model && $model->save()) {
+                Yii::$app->getResponse()->redirect('login');
+            } else {
+                // Yii::$app->getResponse()->redirect('login');
+            }
+        }
+    }
+
+    /**
+    * Login Functions
+    */
+
+    public function login()
+    {
+        if ($this->validate()) {
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+        } else {
+            return false;
+        }
+    }
+
+    public function getUser()
+    {
+        if ($this->_user === false) {
+            $this->_user = User::findByUsername($this->name);
+        }
+
+        return $this->_user;
+    }
+
+    public function validatePassword($attribute, $params)
+    {   
+        if (!$this->hasErrors()) {
+            $_user = $this->getUser();
+
+            if (!$_user || !Yii::$app->getSecurity()->validatePassword($this->password, $_user->password)) {
+                $this->addError($attribute, 'Incorrect username or password.');
+            }
+        }
     }
 }
