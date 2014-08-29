@@ -11,9 +11,9 @@ class m140827_033137_answers extends Migration
     		'id'			=> Schema::TYPE_INTEGER.' UNSIGNED AUTO_INCREMENT PRIMARY KEY',
     		'answer'		=> Schema::TYPE_TEXT.' NOT NULL',
     		'name'			=> Schema::TYPE_STRING.' NOT NULL',
-    		'email'			=> Schema::TYPE_STRING,
+    		'email'			=> Schema::TYPE_STRING.'(50) NOT NULL',
     		'best_answer'	=> Schema::TYPE_INTEGER.' UNSIGNED',
-    		'votes'			=> Schema::TYPE_INTEGER,
+    		'votes'			=> Schema::TYPE_INTEGER.' NOT NULL',
     		'created_at'	=> Schema::TYPE_INTEGER.' UNSIGNED',
     		'updated_at'	=> Schema::TYPE_INTEGER.' UNSIGNED',
 

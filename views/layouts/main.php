@@ -26,7 +26,7 @@ AppAsset::register($this);
     <div class="wrap">
         <?php
             NavBar::begin([
-                'brandLabel' => 'Q + A',
+                'brandLabel' => 'Q-A',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-inverse navbar-fixed-top',
@@ -37,10 +37,18 @@ AppAsset::register($this);
                 'items' => [
                     ['label' => 'Home', 'url' => ['/site/index']],
                     Yii::$app->user->isGuest ?
+                        '' :  
+                        [
+                            'label' => 'Profile',
+                            'url' => ['/site/profile'],
+                        ],
+                    Yii::$app->user->isGuest ?
                         ['label' => 'Login', 'url' => ['/site/login']] :
-                        ['label' => 'Logout (' . Yii::$app->user->identity->name . ')',
+                        [
+                            'label' => 'Logout (' . Yii::$app->user->identity->name . ')',
                             'url' => ['/site/logout'],
-                            'linkOptions' => ['data-method' => 'post']],
+                            'linkOptions' => ['data-method' => 'post']
+                        ]
                 ],
             ]);
             NavBar::end();
@@ -56,7 +64,7 @@ AppAsset::register($this);
 
     <footer class="footer">
         <div class="container">
-            <p class="pull-left">&copy; Q + A <?= date('Y') ?></p>
+            <p class="pull-left">&copy; Q-A <?= date('Y') ?></p>
             <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>

@@ -6,8 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\RegisterForm;
+use app\models\Question;
 use app\models\ContactForm;
 use app\models\User;
 use yii\data\ActiveDataProvider;
@@ -52,7 +51,8 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        // return $this->render('index');
+        return $this->actionNewest();
     }
 
     public function actionLogin()
@@ -66,9 +66,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+            return $this->render('login', compact('model'));
         }
     }
 
@@ -78,9 +76,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->register()) {
             return $this->goBack();
         } else {
-            return $this->render('register', [
-                'model' => $model,
-            ]);
+            return $this->render('register', compact('model'));
         }
     }
 
@@ -112,32 +108,58 @@ class SiteController extends Controller
 
     public function actionNewest(){
         $menu = 'newest';
-        // $dataProvider = new ActiveDataProvider([
-        //     'query' => Question::find(),
-        //     'pagination' => [
-        //         'pageSize' => 20,
-        //     ],
-        // ]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Question::find()->orderBy('created_at'),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
         return $this->render('index', compact('menu', 'dataProvider'));
     }
 
     public function actionFeatured(){
         $menu = 'featured';
+        $dataProvider = new ActiveDataProvider([
+            'query' => Question::find()->orderBy('created_at'),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
         return $this->render('index', compact('menu'));
     }
 
     public function actionFrequent(){
         $menu = 'frequent';
+        $dataProvider = new ActiveDataProvider([
+            'query' => Question::find()->orderBy('created_at'),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
         return $this->render('index', compact('menu'));
     }
 
     public function actionTags(){
         $menu = 'tags';
+        $dataProvider = new ActiveDataProvider([
+            'query' => Question::find()->orderBy('created_at'),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
         return $this->render('index', compact('menu'));
     }
 
     public function actionUnanswered(){
         $menu = 'unanswered';
+        $dataProvider = new ActiveDataProvider([
+            'query' => Question::find()
+                        ->where()
+                        ->orderBy('created_at'),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
         return $this->render('index', compact('menu'));
     }
 }

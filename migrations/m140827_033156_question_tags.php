@@ -9,8 +9,8 @@ class m140827_033156_question_tags extends Migration
     {
     	$this->createTable('question_tags', [
     		'id'			=> Schema::TYPE_INTEGER.' UNSIGNED AUTO_INCREMENT PRIMARY KEY',
-    		'tag_id'		=> Schema::TYPE_INTEGER.' UNSIGNED',
-    		'question_id'	=> Schema::TYPE_INTEGER.' UNSIGNED',
+    		'tag_id'		=> Schema::TYPE_INTEGER.' NOT NULL UNSIGNED',
+    		'question_id'	=> Schema::TYPE_INTEGER.' NOT NULL UNSIGNED',
     	]);
     }
 

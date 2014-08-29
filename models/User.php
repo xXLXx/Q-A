@@ -80,6 +80,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             // username and password are both required
             [['name', 'password'], 'required'],
             ['email', 'email'],
+            ['name', 'filter', 'filter' => 'ucwords', 'on' => 'register'],
             ['password', 'validatePassword', 'on' => 'login'],
             ['password_repeat', 'compare', 'compareAttribute' => 'password'],
             [['password_repeat', 'email'], 'required', 'on' => 'register'],

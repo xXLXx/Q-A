@@ -31,7 +31,7 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question'], 'required'],
+            [['question', 'title'], 'required', 'on' => 'add'],
             [['question'], 'string'],
             [['user_id', 'votes', 'created_at', 'updated_at'], 'integer'],
             [['email'], 'string', 'max' => 50]
@@ -52,5 +52,19 @@ class Question extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function add(){
+        if ($this->validate()) {
+            $model = new Question();
+            $model->user_id = Yii::$app->user->identity->id;
+            $model->votes = 0;
+            $model->load(Yii::$app->request->post());
+            if ($model && $model->save()) {
+                Yii::$app->getResponse()->redirect('profile');
+            } else {
+                // Yii::$app->getResponse()->redirect('login');
+            }
+        }
     }
 }

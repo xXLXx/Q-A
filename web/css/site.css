@@ -158,7 +158,16 @@ a.desc:after {
 }
 .bs-example .btn-top-right:hover{
     float: right;
-    background-color: #563d7c;
-    border-color: #563d7c;
+    background-color: #6f5499;
+    border-color: #6f5499;
     color: #EEE;
+}
+
+.top-right-red:hover{
+    background-color: #d9534f !important;
+    border-color: #d43f3a !important;
+}
+
+#add-question:after{
+    content: "Ask a Question";
 }
