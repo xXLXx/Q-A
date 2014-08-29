@@ -40,7 +40,7 @@ AppAsset::register($this);
                         '' :  
                         [
                             'label' => 'Profile',
-                            'url' => ['/site/profile'],
+                            'url' => ['/profile'],
                         ],
                     Yii::$app->user->isGuest ?
                         ['label' => 'Login', 'url' => ['/site/login']] :

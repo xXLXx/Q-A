@@ -143,4 +143,27 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             }
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'created_at' => 'Account Created',
+            'updated_at' => 'Last Update',
+        ];
+    }
+
+    public function getQuestionsCount(){
+        return Question::find()->where(['user_id' => $this->id])->count();
+    }
+
+    public function getAnswersCount(){
+        return 1;
+    }
+
+    public function getTagsCount(){
+        return 0;
+    }
 }

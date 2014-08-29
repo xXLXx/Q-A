@@ -61,7 +61,7 @@ class Question extends \yii\db\ActiveRecord
             $model->votes = 0;
             $model->load(Yii::$app->request->post());
             if ($model && $model->save()) {
-                Yii::$app->getResponse()->redirect('profile');
+                return true;
             } else {
                 // Yii::$app->getResponse()->redirect('login');
             }
