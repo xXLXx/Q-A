@@ -304,7 +304,12 @@ a.desc:after {
 .question-list-item{
     padding: 5px 0 10px 0;
     border-bottom: 2px dotted rgba(0,0,0,0.1);
-    width: 80em;
+    /*width: 80em;*/
+}
+
+.question-list-item > div:first-child{
+    /*margin-left: 1em;*/
+    min-width: 7em;
 }
 
 .question-list-item .well{

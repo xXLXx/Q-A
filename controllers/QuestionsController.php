@@ -20,7 +20,7 @@ class QuestionsController extends \yii\web\Controller
         $model = new Question();
         $model->scenario = 'add';
         if ($model->load(Yii::$app->request->post()) && $model->add()) {
-            Yii::$app->getResponse()->redirect('../profile');
+            Yii::$app->getResponse()->redirect('@web/profile');
         } else {
             return $this->render('add', compact('model'));
         }

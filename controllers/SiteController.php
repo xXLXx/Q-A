@@ -66,6 +66,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
+            $model->password = '';
             return $this->render('login', compact('model'));
         }
     }
@@ -76,6 +77,8 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->register()) {
             return $this->goBack();
         } else {
+            $model->password = '';
+            $model->password_repeat = '';
             return $this->render('register', compact('model'));
         }
     }

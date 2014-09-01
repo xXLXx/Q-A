@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -80,13 +81,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             // username and password are both required
             [['name', 'password'], 'required'],
             ['email', 'email'],
-            ['name', 'filter', 'filter' => 'ucwords', 'on' => 'register'],
             ['password', 'validatePassword', 'on' => 'login'],
-            ['password_repeat', 'compare', 'compareAttribute' => 'password'],
+            ['password_repeat', 'compare', 'compareValue' => Yii::$app->request->post('password'), 'compareAttribute' => 'password'],
             [['password_repeat', 'email'], 'required', 'on' => 'register'],
             ['rememberMe', 'boolean'],
             ['rememberMe', 'required', 'on' => 'login'],
             [['name', 'email'], 'unique', 'on' => 'register'],
+            ['name', 'filter', 'filter' => 'ucwords', 'on' => 'register'],
+            ['password', 'filter', 'filter' => function($value){
+                return Yii::$app->getSecurity()->generatePasswordHash($value);
+            }, 'on' => 'register'],
         ];
     }
 
@@ -97,13 +101,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function register()
     {
         if ($this->validate()) {
-            $model = new User([
-                'name'      => ucwords($this->name),
-                'email'     => $this->email,
-                'password'  => Yii::$app->getSecurity()->generatePasswordHash($this->password),
-            ]);
-
-            if ($model && $model->save()) {
+            if ($this && $this->save(false)) {
                 Yii::$app->getResponse()->redirect('login');
             } else {
                 // Yii::$app->getResponse()->redirect('login');
@@ -137,7 +135,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {   
         if (!$this->hasErrors()) {
             $_user = $this->getUser();
-
             if (!$_user || !Yii::$app->getSecurity()->validatePassword($this->password, $_user->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
@@ -165,5 +162,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function getTagsCount(){
         return 0;
+    }
+
+    public function behaviors(){
+        return [
+            TimestampBehavior::className(),
+        ];
     }
 }

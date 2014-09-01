@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "questions".
@@ -32,7 +33,9 @@ class Question extends \yii\db\ActiveRecord
     {
         return [
             [['question', 'title'], 'required', 'on' => 'add'],
-            [['question'], 'string'],
+            [['question', 'title'], 'string'],
+            ['votes', 'default', 'value' => 0],
+            ['user_id', 'default', 'value' => Yii::$app->user->identity->id],
             [['user_id', 'votes', 'created_at', 'updated_at'], 'integer'],
             [['email'], 'string', 'max' => 50]
         ];
@@ -57,8 +60,6 @@ class Question extends \yii\db\ActiveRecord
     public function add(){
         if ($this->validate()) {
             $model = new Question();
-            $model->user_id = Yii::$app->user->identity->id;
-            $model->votes = 0;
             $model->load(Yii::$app->request->post());
             if ($model && $model->save()) {
                 return true;
@@ -66,5 +67,11 @@ class Question extends \yii\db\ActiveRecord
                 // Yii::$app->getResponse()->redirect('login');
             }
         }
+    }
+
+    public function behaviors(){
+        return [
+            TimestampBehavior::className(),
+        ];
     }
 }

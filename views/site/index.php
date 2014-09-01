@@ -25,6 +25,34 @@ $this->title = 'Q-A';
                     if(isset($dataProvider)){
                         echo ListView::widget([
                             'dataProvider'  => $dataProvider,
+                            'itemView'      => function ($model, $key, $index, $widget){
+                                return
+                                    '<div class="row question-list-item">
+                                        <div class="col-xs-1 dash-column-right">
+                                            <div class="well">
+                                                <div class="title recent-right">
+                                                    <h4>1</h4>
+                                                    <span>votes</span>
+                                                </div>
+                                                <div class="well-content">
+                                                    <h5>2</h5>
+                                                    <span>answers</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <h4>'.Html::a($model->title, '@web/'.$model->id).'</h4>
+                                            <p>'.$model->question.'</p>
+                                            <div class="micro-text">
+                                                <i class="icon-time pull-right">
+                                                    <small> '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
+                                                </i>
+                                            </div>
+                                        </div>
+                                    </div>';
+                            },
+                            'layout'        => "{items}\n{pager}",
+                            'pager'         => ['options' => ['class' => 'pagination pull-right']],
                         ]);
                     }
                 ?>
