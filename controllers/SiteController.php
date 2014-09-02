@@ -127,8 +127,9 @@ class SiteController extends Controller
     public function actionFeatured(){
         $menu = 'featured';
         $dataProvider = new ActiveDataProvider([
-            'query' => Question::find()->leftJoin('answers', 'question_id = questions.id')
-                        ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
+            'query' => Question::find()
+                        ->leftJoin('answers', 'question_id = questions.id')
+                        ->select('COUNT(answers.id) AS answers_cnt, questions.*')
                         ->groupBy('questions.id')
                         ->orderBy(['votes' => SORT_DESC]),
             'pagination' => [

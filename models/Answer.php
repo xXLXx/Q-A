@@ -55,4 +55,8 @@ class Answer extends \yii\db\ActiveRecord
             'question_id' => 'Question ID',
         ];
     }
+
+    public function getQuestion(){
+        return $this->hasOne(Question::className(), ['id' => 'question_id']);
+    }
 }

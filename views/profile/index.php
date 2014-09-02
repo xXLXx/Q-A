@@ -7,6 +7,7 @@ use yii\base\Formatter;
 use yii\widgets\ListView;
 use yii\helpers\Markdown;
 use app\helpers\TextLimiter;
+use yii\helpers\Inflector;
 ?>
 <?php
     $this->title = 'Q-A: Profile';
@@ -47,7 +48,7 @@ use app\helpers\TextLimiter;
         </div>
     </div>
 </div>
-<br>
+<br/>
 <div class="row">
     <div class="col-xs-10 col-xs-offset-1">
         <?= Nav::widget([
@@ -62,24 +63,28 @@ use app\helpers\TextLimiter;
         if(isset($dataProvider)){
             echo ListView::widget([
                 'dataProvider'  => $dataProvider,
-                'itemView'      => function ($model, $key, $index, $widget){
+                'itemView'      => function ($model, $key, $index, $widget) use($menu){
                     return
                         '<div class="row question-list-item">
                             <div class="col-xs-1 dash-column-right">
                                 <div class="well">
                                     <div class="title recent-right">
-                                        <h4>1</h4>
+                                        <h4>'.$model->votes.'</h4>
                                         <span>votes</span>
-                                    </div>
-                                    <div class="well-content">
-                                        <h5>2</h5>
-                                        <span>answers</span>
-                                    </div>
-                                </div>
+                                    </div>'.
+                                    ($menu != 'answers' ?
+                                        '<div class="well-content">
+                                            <h5>'.$model->answers_cnt.'</h5>
+                                            <span>answers</span>
+                                        </div>' : '')
+                                .'</div>
                             </div>
-                            <div class="col-xs-10">
-                                <h4>'.Html::a($model->title, '@web/'.$model->id).'</h4>
-                                <p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->question), 30)).'</p>
+                            <div class="col-xs-10">'.
+                                '<h4>'.($menu != 'answers' ?
+                                    Html::a($model->title, '@web/'.$model->id) :
+                                    Html::a($model->question->title, '@web/'.$model->question->id)
+                                ).'</h4>'
+                                .'<p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->{Inflector::singularize($menu)}), 30)).'</p>
                                 <div class="micro-text">
                                     <i class="icon-time pull-right">
                                         <small> '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
