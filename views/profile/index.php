@@ -12,8 +12,6 @@ use yii\helpers\Inflector;
 <?php
     $this->title = 'Q-A: Profile';
     $infoExceptions = ['password', 'pic_path', 'auth_key', 'access_token'];
-
-    $this->registerCssFile('@web/css/font-awesome.min.css');
 ?>
 
 <div class="row">
@@ -81,13 +79,13 @@ use yii\helpers\Inflector;
                             </div>
                             <div class="col-xs-10">'.
                                 '<h4>'.($menu != 'answers' ?
-                                    Html::a($model->title, '@web/'.$model->id) :
-                                    Html::a($model->question->title, '@web/'.$model->question->id)
+                                    Html::a($model->title, '@web/questions/'.$model->id) :
+                                    Html::a($model->question->title, '@web/questions/'.$model->question->id)
                                 ).'</h4>'
                                 .'<p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->{Inflector::singularize($menu)}), 30)).'</p>
                                 <div class="micro-text">
                                     <i class="icon-time pull-right">
-                                        <small> '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
+                                        <small> asked '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
                                     </i>
                                 </div>
                             </div>

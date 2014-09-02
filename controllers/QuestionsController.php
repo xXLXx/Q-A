@@ -25,4 +25,9 @@ class QuestionsController extends \yii\web\Controller
             return $this->render('add', compact('model'));
         }
     }
+
+    public function actionView(){
+        $model = Question::find()->where(['id' => Yii::$app->request->getQueryParam('id')])->one();
+        return $this->render('view', compact('model'));
+    }
 }

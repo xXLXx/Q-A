@@ -316,7 +316,7 @@ a.desc:after {
     text-align: center;
 }
 
-.question-list-item .micro-text{
+.micro-text{
     color: #777;
 }
 .question-list-item h4,
@@ -339,4 +339,21 @@ a.desc:after {
 
 .question-list-item{
     padding-top: .5em;
+}
+
+#view-question:after{
+    content: attr(data-content);
+}
+
+.vote-block{
+    font-size: 20px;
+}
+
+.vote-block a{
+    display: block;
+    margin-bottom: -.2em;
+}
+
+.vote-block a:first-child{  
+    margin-left: .1em;
 }

@@ -43,11 +43,11 @@ $this->title = 'Q-A';
                                             </div>
                                         </div>
                                         <div class="col-xs-10">
-                                            <h4>'.Html::a($model->title, '@web/'.$model->id).'</h4>
+                                            <h4>'.Html::a($model->title, '@web/questions/'.$model->id).'</h4>
                                             <p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->question), 30)).'</p>
                                             <div class="micro-text">
                                                 <i class="icon-time pull-right">
-                                                    <small> '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
+                                                    <small> asked '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
                                                 </i>
                                             </div>
                                         </div>
