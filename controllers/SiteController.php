@@ -10,6 +10,7 @@ use app\models\Question;
 use app\models\ContactForm;
 use app\models\User;
 use yii\data\ActiveDataProvider;
+use app\models\Answer;
 
 class SiteController extends Controller
 {
@@ -112,9 +113,12 @@ class SiteController extends Controller
     public function actionNewest(){
         $menu = 'newest';
         $dataProvider = new ActiveDataProvider([
-            'query' => Question::find()->orderBy('created_at'),
+            'query' => Question::find()->leftJoin('answers', 'question_id = questions.id')
+                        ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
+                        ->groupBy('questions.id')
+                        ->orderBy(['created_at' => SORT_DESC]),
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 10,
             ],
         ]);
         return $this->render('index', compact('menu', 'dataProvider'));
@@ -123,23 +127,29 @@ class SiteController extends Controller
     public function actionFeatured(){
         $menu = 'featured';
         $dataProvider = new ActiveDataProvider([
-            'query' => Question::find()->orderBy('created_at'),
+            'query' => Question::find()->leftJoin('answers', 'question_id = questions.id')
+                        ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
+                        ->groupBy('questions.id')
+                        ->orderBy(['votes' => SORT_DESC]),
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 10,
             ],
         ]);
-        return $this->render('index', compact('menu'));
+        return $this->render('index', compact('menu', 'dataProvider'));
     }
 
     public function actionFrequent(){
         $menu = 'frequent';
         $dataProvider = new ActiveDataProvider([
-            'query' => Question::find()->orderBy('created_at'),
+            'query' => Question::find()->leftJoin('answers', 'question_id = questions.id')
+                        ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
+                        ->groupBy('questions.id')
+                        ->orderBy(['answers_cnt' => SORT_DESC]),
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 10,
             ],
         ]);
-        return $this->render('index', compact('menu'));
+        return $this->render('index', compact('menu', 'dataProvider'));
     }
 
     public function actionTags(){
@@ -147,7 +157,7 @@ class SiteController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Question::find()->orderBy('created_at'),
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 10,
             ],
         ]);
         return $this->render('index', compact('menu'));
@@ -156,13 +166,14 @@ class SiteController extends Controller
     public function actionUnanswered(){
         $menu = 'unanswered';
         $dataProvider = new ActiveDataProvider([
-            'query' => Question::find()
-                        ->where()
-                        ->orderBy('created_at'),
+            'query' => Question::find()->where([
+                            'not in', 
+                            'id', Answer::find()->select('question_id')->distinct()
+                        ])->orderBy(['created_at' => SORT_DESC]),
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 10,
             ],
         ]);
-        return $this->render('index', compact('menu'));
+        return $this->render('index', compact('menu', 'dataProvider'));
     }
 }

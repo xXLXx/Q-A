@@ -13,6 +13,7 @@ class m140827_033130_questions extends Migration
     		'question'		=> Schema::TYPE_TEXT.' NOT NULL',
     		'user_id'		=> Schema::TYPE_INTEGER.' UNSIGNED NOT NULL',
     		'votes'			=> Schema::TYPE_INTEGER.' NOT NULL',
+            'best_answer'   => Schema::TYPE_INTEGER.' UNSIGNED',
     		'created_at'	=> Schema::TYPE_INTEGER.' UNSIGNED',
     		'updated_at'	=> Schema::TYPE_INTEGER.' UNSIGNED',
 

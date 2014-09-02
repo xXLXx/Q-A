@@ -3,6 +3,8 @@ use yii\widgets\ListView;
 use yii\bootstrap\Nav;
 use yii\helpers\Html;
 use app\helpers\NavItemsGenerator;
+use yii\helpers\Markdown;
+use app\helpers\TextLimiter;
 /* @var $this yii\web\View */
 $this->title = 'Q-A';
 ?>
@@ -31,18 +33,18 @@ $this->title = 'Q-A';
                                         <div class="col-xs-1 dash-column-right">
                                             <div class="well">
                                                 <div class="title recent-right">
-                                                    <h4>1</h4>
+                                                    <h4>'.$model->votes.'</h4>
                                                     <span>votes</span>
                                                 </div>
                                                 <div class="well-content">
-                                                    <h5>2</h5>
+                                                    <h5>'.$model->answers_cnt.'</h5>
                                                     <span>answers</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-xs-10">
                                             <h4>'.Html::a($model->title, '@web/'.$model->id).'</h4>
-                                            <p>'.$model->question.'</p>
+                                            <p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->question), 30)).'</p>
                                             <div class="micro-text">
                                                 <i class="icon-time pull-right">
                                                     <small> '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
@@ -53,6 +55,7 @@ $this->title = 'Q-A';
                             },
                             'layout'        => "{items}\n{pager}",
                             'pager'         => ['options' => ['class' => 'pagination pull-right']],
+                            'itemOptions'   => ['tag' => false]
                         ]);
                     }
                 ?>

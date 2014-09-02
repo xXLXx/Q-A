@@ -301,7 +301,7 @@ a.desc:after {
     /*background-color: #f7f7f9;*/
 }
 
-.question-list-item{
+.question-list-item:not(:nth-last-of-type(1)){
     padding: 5px 0 10px 0;
     border-bottom: 2px dotted rgba(0,0,0,0.1);
     /*width: 80em;*/
@@ -331,4 +331,12 @@ a.desc:after {
 .question-list-item .well-content{
     font-size: 12px;
     padding: 5px !important;
+}
+
+.question-list-item h4{
+    margin-bottom: .3em;
+}
+
+.question-list-item{
+    padding-top: .5em;
 }

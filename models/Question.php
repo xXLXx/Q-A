@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use app\models\Answer;
 
 /**
  * This is the model class for table "questions".
@@ -18,6 +19,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class Question extends \yii\db\ActiveRecord
 {
+    public $answers_cnt = 0;
     /**
      * @inheritdoc
      */
@@ -73,5 +75,9 @@ class Question extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::className(),
         ];
+    }
+
+    public function getAnswers(){
+        return $this->hasMany(Answer::className(), ['question_id' => 'id']);
     }
 }

@@ -5,6 +5,8 @@ use app\helpers\NavItemsGenerator;
 use yii\helpers\Html;
 use yii\base\Formatter;
 use yii\widgets\ListView;
+use yii\helpers\Markdown;
+use app\helpers\TextLimiter;
 ?>
 <?php
     $this->title = 'Q-A: Profile';
@@ -77,7 +79,7 @@ use yii\widgets\ListView;
                             </div>
                             <div class="col-xs-10">
                                 <h4>'.Html::a($model->title, '@web/'.$model->id).'</h4>
-                                <p>'.$model->question.'</p>
+                                <p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->question), 30)).'</p>
                                 <div class="micro-text">
                                     <i class="icon-time pull-right">
                                         <small> '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
@@ -88,6 +90,7 @@ use yii\widgets\ListView;
                 },
                 'layout'        => "{items}\n{pager}",
                 'pager'         => ['options' => ['class' => 'pagination pull-right']],
+                'itemOptions'   => ['tag' => false]
             ]);
         }
         ?>

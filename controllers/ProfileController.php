@@ -16,7 +16,7 @@ class ProfileController extends \yii\web\Controller
     public function actionQuestions(){
         $menu = 'questions';
         $dataProvider = new ActiveDataProvider([
-            'query'         => Question::find()->where(['user_id' => Yii::$app->user->identity->id]),
+            'query'         => Question::find()->where(['user_id' => Yii::$app->user->identity->id])->orderBy(['created_at' => SORT_DESC]),
             'pagination'    => [
                 'pageSize' => 10,
             ],
