@@ -45,10 +45,17 @@ $this->title = 'Q-A';
                                         <div class="col-xs-10">
                                             <h4>'.Html::a($model->title, '@web/questions/'.$model->id).'</h4>
                                             <p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->question), 30)).'</p>
-                                            <div class="micro-text">
-                                                <i class="icon-time pull-right">
-                                                    <small> asked '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
-                                                </i>
+                                            <div class="pull-right col-xs-3">
+                                                <div class="micro-text pull-left">
+                                                    <i class="icon-time">
+                                                        <small> asked '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
+                                                    </i>
+                                                    <br>
+                                                    <div class="user-pic">
+                                                        <span class="glyphicon glyphicon-user"></span>
+                                                    </div>
+                                                    <small class="user-name">'.$model->user->name.'</small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>';

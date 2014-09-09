@@ -26,10 +26,17 @@ use app\models\Answer;
                 </div>
                 <div class="col-xs-11">
                     <p><?= Markdown::process($model->question) ?></p>
-                    <div class="micro-text">
-                        <i class="icon-time pull-right">
-                            <small> asked <?= Yii::$app->formatter->asRelativeTime($model->updated_at) ?></small>
-                        </i>
+                    <div class="pull-right col-xs-3">
+                        <div class="micro-text pull-left">
+                            <i class="icon-time">
+                                <small> asked <?= Yii::$app->formatter->asRelativeTime($model->updated_at) ?></small>
+                            </i>
+                            <br>
+                            <div class="user-pic">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </div>
+                            <small class="user-name"><?= $model->user->name?></small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -50,10 +57,17 @@ use app\models\Answer;
                 </div>
                 <div class="col-xs-11">
                     <p><?= Markdown::process($value->answer) ?></p>
-                    <div class="micro-text">
-                        <i class="icon-time pull-right">
-                            <small> answered <?= Yii::$app->formatter->asRelativeTime($value->updated_at) ?></small>
-                        </i>
+                    <div class="pull-right col-xs-3">
+                        <div class="micro-text pull-left">
+                            <i class="icon-time">
+                                <small> answered <?= Yii::$app->formatter->asRelativeTime($value->updated_at) ?></small>
+                            </i>
+                            <br>
+                            <div class="user-pic">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </div>
+                            <small class="user-name"><?= $value->user_group == Answer::USER_GROUP_GUEST ? $value->guest->name : $value->user->name ?></small>
+                        </div>
                     </div>
                 </div>
             </div>

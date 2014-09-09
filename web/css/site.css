@@ -363,3 +363,30 @@ a.desc:after {
 .vote-block a:first-child{  
     margin-left: .1em;
 }
+
+.micro-text .user-pic{
+    background-color: #563d7c;
+    display: inline-block;
+    /*padding: 3px;*/
+    overflow: hidden;
+    border-radius: 50%;
+    font-size: 23px;
+    color: #DDD;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #444;
+    text-align: center;
+}
+
+.micro-text .user-pic span{
+    vertical-align: top;
+    margin-top: .18em;
+}
+
+.micro-text .user-name{
+    display: inline-block;
+    vertical-align: top;
+    margin-top: .5em;
+    margin-left: .1em;
+}
+

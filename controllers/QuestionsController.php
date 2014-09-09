@@ -29,7 +29,9 @@ class QuestionsController extends \yii\web\Controller
     }
 
     public function actionView(){
-        $model = Question::find()->where(['id' => Yii::$app->request->getQueryParam('id')])->one();
+        $model = Question::find()->with(['answers' => function($query){
+            $query->with('user', 'guest');
+        }])->where(['id' => Yii::$app->request->getQueryParam('id')])->one();
         $answerModel = new Answer();
         $guestModel = new Guest();
         if(Yii::$app->user->isGuest){

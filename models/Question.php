@@ -78,4 +78,8 @@ class Question extends \yii\db\ActiveRecord
     public function getAnswers(){
         return $this->hasMany(Answer::className(), ['question_id' => 'id']);
     }
+
+    public function getUser(){
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
 }

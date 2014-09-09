@@ -68,6 +68,10 @@ class Answer extends \yii\db\ActiveRecord
         return $this->hasOne(Guest::className(), ['id' => 'user_id']);
     }
 
+    public function getUser(){
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
     public function add($guestModel){
         if($this->user_group == static::USER_GROUP_USER){
             $this->user_id = Yii::$app->user->identity->id;

@@ -125,6 +125,7 @@ class SiteController extends Controller
         $menu = 'newest';
         $dataProvider = new ActiveDataProvider([
             'query' => Question::find()->leftJoin('answers', 'question_id = questions.id')
+                        ->with('user')
                         ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
                         ->groupBy('questions.id')
                         ->orderBy(['created_at' => SORT_DESC]),
