@@ -39,7 +39,7 @@ class Question extends \yii\db\ActiveRecord
             ['votes', 'default', 'value' => 0],
             ['user_id', 'default', 'value' => Yii::$app->user->identity->id],
             [['user_id', 'votes', 'created_at', 'updated_at'], 'integer'],
-            [['email'], 'string', 'max' => 50]
+            [['email'], 'string', 'max' => 50],
         ];
     }
 
@@ -61,9 +61,7 @@ class Question extends \yii\db\ActiveRecord
 
     public function add(){
         if ($this->validate()) {
-            $model = new Question();
-            $model->load(Yii::$app->request->post());
-            if ($model && $model->save()) {
+            if ($this && $this->save()) {
                 return true;
             } else {
                 // Yii::$app->getResponse()->redirect('login');

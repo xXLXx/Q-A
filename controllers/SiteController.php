@@ -11,6 +11,7 @@ use app\models\ContactForm;
 use app\models\User;
 use yii\data\ActiveDataProvider;
 use app\models\Answer;
+use yii\helpers\Url;
 
 class SiteController extends Controller
 {
@@ -48,6 +49,16 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    public function beforeAction($action)
+    {
+        if (parent::beforeAction($action)) {
+            Url::remember(Url::canonical(), 'lastRequest');
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function actionIndex()

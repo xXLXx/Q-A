@@ -297,6 +297,12 @@ a.desc:after {
     background-color: #6f5499;
 }
 
+.flat-well{
+    background-color: #ececec;
+    border-radius: 3px;
+    padding: 20px;
+}
+
 .nav-tabs-content{
     /*background-color: #f7f7f9;*/
 }

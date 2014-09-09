@@ -18,6 +18,9 @@ use Yii;
  */
 class Answer extends \yii\db\ActiveRecord
 {
+    const USER_GROUP_GUEST = 0;
+    const USER_GROUP_USER = 1;
+
     /**
      * @inheritdoc
      */
@@ -32,10 +35,11 @@ class Answer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['answer', 'name', 'question_id'], 'required'],
+            [['answer', 'user_id', 'user_group'], 'required'],
             [['answer'], 'string'],
-            [['votes', 'created_at', 'updated_at', 'question_id'], 'integer'],
-            [['name', 'email'], 'string', 'max' => 255]
+            [['votes', 'created_at', 'updated_at', 'question_id', 'user_group', 'user_id'], 'integer'],
+            ['question_id', 'default', 'value' => Yii::$app->request->getQueryParam('id')],
+
         ];
     }
 
@@ -47,8 +51,8 @@ class Answer extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'answer' => 'Answer',
-            'name' => 'Name',
-            'email' => 'Email',
+            'user_group' => 'User Type',
+            'user_id' => 'User ID',
             'votes' => 'Votes',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -58,5 +62,31 @@ class Answer extends \yii\db\ActiveRecord
 
     public function getQuestion(){
         return $this->hasOne(Question::className(), ['id' => 'question_id']);
+    }
+
+    public function getGuest(){
+        return $this->hasOne(Guest::className(), ['id' => 'user_id']);
+    }
+
+    public function add($guestModel){
+        if($this->user_group == static::USER_GROUP_USER){
+            $this->user_id = Yii::$app->user->identity->id;
+        }
+        else{
+            if($guestModel->save()){
+                $this->link('guest', $guestModel);
+            }
+            else{
+                return false;
+            }
+        }
+        if($this->validate()){
+            if($this and $this->save()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }var_dump($this->errors); exit();
     }
 }

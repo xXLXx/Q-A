@@ -7,9 +7,20 @@ use app\models\Question;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use app\models\Answer;
+use yii\helpers\Url;
 
 class ProfileController extends \yii\web\Controller
 {
+    public function beforeAction($action)
+    {
+        if (parent::beforeAction($action)) {
+            Url::remember(Url::canonical(), 'lastRequest');
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function actionIndex(){
         return $this->actionQuestions();
     }
@@ -19,7 +30,7 @@ class ProfileController extends \yii\web\Controller
         $dataProvider = new ActiveDataProvider([
             'query'         => Question::find()->leftJoin('answers', 'question_id = questions.id')
                                 ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
-                                ->where(['user_id' => Yii::$app->user->identity->id])
+                                ->where(['questions.user_id' => Yii::$app->user->identity->id])
                                 ->groupBy('questions.id')
                                 ->orderBy(['created_at' => SORT_DESC]),
             'pagination'    => [
@@ -34,7 +45,7 @@ class ProfileController extends \yii\web\Controller
         $dataProvider = new ActiveDataProvider([
             'query'         => Answer::find()
                                 ->with('question')
-                                ->where(['name' => Yii::$app->user->identity->id])
+                                ->where(['user_id' => Yii::$app->user->identity->id])
                                 ->orderBy(['created_at' => SORT_DESC]),
             'pagination'    => [
                 'pageSize' => 10,

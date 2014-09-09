@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Question;
+use app\models\Answer;
+use app\models\Guest;
 
 class QuestionsController extends \yii\web\Controller
 {
@@ -20,7 +22,7 @@ class QuestionsController extends \yii\web\Controller
         $model = new Question();
         $model->scenario = 'add';
         if ($model->load(Yii::$app->request->post()) && $model->add()) {
-            Yii::$app->getResponse()->redirect('@web/profile');
+            Yii::$app->response->redirect('@web/profile');
         } else {
             return $this->render('add', compact('model'));
         }
@@ -28,6 +30,25 @@ class QuestionsController extends \yii\web\Controller
 
     public function actionView(){
         $model = Question::find()->where(['id' => Yii::$app->request->getQueryParam('id')])->one();
-        return $this->render('view', compact('model'));
+        $answerModel = new Answer();
+        $guestModel = new Guest();
+        if(Yii::$app->user->isGuest){
+            // $answerModel->scenario = 'guest';
+            $answerModel->user_group = Answer::USER_GROUP_GUEST;
+        }
+        else{
+            // $answerModel->scenario = 'user';
+            $answerModel->user_group = Answer::USER_GROUP_USER;
+        }
+
+        if($answerModel->load(Yii::$app->request->post()) and
+            (!Yii::$app->user->isGuest || $guestModel->load(Yii::$app->request->post())) and
+            $answerModel->add($guestModel)){
+            return $this->redirect(Yii::$app->request->getQueryParam('id'));
+        }
+        else{
+            return $this->render('view', compact('model', 'answerModel', 'guestModel'));
+        }
+        
     }
 }

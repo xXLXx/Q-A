@@ -157,7 +157,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     public function getAnswersCount(){
-        return Answer::find()->where(['name' => $this->id])->count();
+        return Answer::find()->where(['user_id' => $this->id])->count();
     }
 
     public function getTagsCount(){
