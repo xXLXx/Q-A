@@ -42,7 +42,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '<controller:\w+>/<id:\d+>' => '<controller>/view'
+                'questions/<id:\d+>' => 'questions/view',
+                'questions/<id:\d+>/comment' => 'questions/comment',
+                'questions/<id:\d+>/comment/<answerId:\d+>' => 'questions/comment'
             ]
         ],
     ],

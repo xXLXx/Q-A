@@ -6,6 +6,7 @@ use Yii;
 use app\models\Question;
 use app\models\Answer;
 use app\models\Guest;
+use app\models\Comment;
 
 class QuestionsController extends \yii\web\Controller
 {
@@ -28,12 +29,18 @@ class QuestionsController extends \yii\web\Controller
         }
     }
 
-    public function actionView(){
-        $model = Question::find()->with(['answers' => function($query){
-            $query->with('user', 'guest');
-        }])->where(['id' => Yii::$app->request->getQueryParam('id')])->one();
+    /**
+    * @param $commentId id of answer to comment to, or 0 for the question itself
+    */
+    public function actionView($commentsModel = null){
+        /**
+        * Questions and answer from guest form logged in user
+        */
+        $model = Question::find()->with('comments')->where(['id' => Yii::$app->request->getQueryParam('id')])->one();
+        
         $answerModel = new Answer();
         $guestModel = new Guest();
+
         if(Yii::$app->user->isGuest){
             // $answerModel->scenario = 'guest';
             $answerModel->user_group = Answer::USER_GROUP_GUEST;
@@ -49,8 +56,28 @@ class QuestionsController extends \yii\web\Controller
             return $this->redirect(Yii::$app->request->getQueryParam('id'));
         }
         else{
-            return $this->render('view', compact('model', 'answerModel', 'guestModel'));
+            return $this->render('view', compact('model', 'answerModel', 'guestModel', 'commentsModel'));
         }
         
+    }
+
+    public function actionComment(){
+        $answerId;
+        /**
+        * Comments
+        */
+        $commentsModel = new Comment();
+        $commentsModel->comment_for = ($answerId = Yii::$app->request->getQueryParam('answerId')) == null ?
+            Comment::COMMENT_FOR_QUESTION : Comment::COMMENT_FOR_ANSWER;
+        $commentsModel->for_id = $commentsModel->comment_for == Comment::COMMENT_FOR_QUESTION ?
+            Yii::$app->request->getQueryParam('id') : $answerId;
+
+        if($commentsModel->load(Yii::$app->request->post()) and $commentsModel->add()){
+            $return = $commentsModel->comment_for == Comment::COMMENT_FOR_QUESTION ? '../' : '../../';
+            return $this->redirect($return.Yii::$app->request->getQueryParam('id'));
+        }
+        else{
+            return $this->actionView($commentsModel);
+        }
     }
 }

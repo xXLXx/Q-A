@@ -82,4 +82,8 @@ class Question extends \yii\db\ActiveRecord
     public function getUser(){
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function getComments(){
+        return $this->hasMany(Comment::className(), ['for_id' => 'id'])->where(['comment_for' => Comment::COMMENT_FOR_QUESTION]);
+    }
 }

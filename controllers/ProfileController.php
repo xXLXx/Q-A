@@ -45,10 +45,13 @@ class ProfileController extends \yii\web\Controller
         $dataProvider = new ActiveDataProvider([
             'query'         => Answer::find()
                                 ->with('question')
-                                ->where(['user_id' => Yii::$app->user->identity->id])
+                                ->where([
+                                    'user_id' => Yii::$app->user->identity->id,
+                                    'user_group' => Answer::USER_GROUP_USER
+                                    ])
                                 ->orderBy(['created_at' => SORT_DESC]),
             'pagination'    => [
-                'pageSize' => 10,
+                'pageSize'      => 10,
             ],
         ]);
         return $this->render('index', compact('menu', 'dataProvider'));

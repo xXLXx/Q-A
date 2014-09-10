@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "guests".
@@ -43,6 +44,12 @@ class Guest extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'email' => 'Email',
+        ];
+    }
+
+    public function behaviors(){
+        return [
+            TimestampBehavior::className(),
         ];
     }
 }

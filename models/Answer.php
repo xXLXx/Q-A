@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "answers".
@@ -72,6 +73,10 @@ class Answer extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    public function getComments(){
+        return $this->hasMany(Comment::className(), ['for_id' => 'id'])->where(['comment_for' => Comment::COMMENT_FOR_ANSWER]);
+    }
+
     public function add($guestModel){
         if($this->user_group == static::USER_GROUP_USER){
             $this->user_id = Yii::$app->user->identity->id;
@@ -91,6 +96,12 @@ class Answer extends \yii\db\ActiveRecord
             else{
                 return false;
             }
-        }var_dump($this->errors); exit();
+        }
+    }
+
+    public function behaviors(){
+        return [
+            TimestampBehavior::className(),
+        ];
     }
 }

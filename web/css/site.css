@@ -322,9 +322,6 @@ a.desc:after {
     text-align: center;
 }
 
-.micro-text{
-    color: #777;
-}
 .question-list-item h4,
 .question-list-item h5{
     margin: 0px;
@@ -364,6 +361,10 @@ a.desc:after {
     margin-left: .1em;
 }
 
+.micro-text{
+    color: #777;
+}
+
 .micro-text .user-pic{
     background-color: #563d7c;
     display: inline-block;
@@ -390,3 +391,22 @@ a.desc:after {
     margin-left: .1em;
 }
 
+.comment-link{
+    text-transform: uppercase;
+    color: #888;
+    padding: .3em;
+}
+
+.comment-link:hover{
+    text-decoration: none;
+    color: #FFF;
+    background-color: #888;
+}
+
+[name="register-button"]{
+    margin-bottom: 10px;
+}
+
+.comment-item *{
+    display: inline;
+}
