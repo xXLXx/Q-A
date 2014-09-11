@@ -30,6 +30,9 @@ use yii\data\ActiveDataProvider;
                 </div>
                 <div class="col-xs-11">
                     <p><?= Markdown::process($model->question) ?></p>
+                    <?php foreach ($model->tags as $key => $value): ?>
+                        <a href="" class="tag"><small><?= $value->name ?></small></a>
+                    <?php endforeach;?>
                     <div class="pull-right col-xs-3">
                         <div class="micro-text pull-left">
                             <i class="icon-time">   
@@ -75,7 +78,6 @@ use yii\data\ActiveDataProvider;
                     'itemView'      => function ($model, $key, $index, $widget) use($commentsModel){
                         $addAComment = '';
                         $heading = '';
-                        $tags = '';
 
                         /**
                         * Add a Comment
@@ -103,13 +105,6 @@ use yii\data\ActiveDataProvider;
                             $heading = '<h4><span class="label label-success">'.$widget->dataProvider->pagination->totalCount.'</span> Answers</h4>';
                         }
 
-                        /**
-                        * Tags
-                        */
-                        foreach ($model->tags as $key => $value) {
-                            $tags .= '<a href="" class="tag"><small>'.$value->name.'</small></a>';
-                        }
-
                         return
                             $heading.'
                             <hr>
@@ -121,7 +116,6 @@ use yii\data\ActiveDataProvider;
                                 '</div>
                                 <div class="col-xs-11">
                                     <p>'.Markdown::process($model->answer).'</p>
-                                    '.$tags.'
                                     <div class="pull-right col-xs-3">
                                         <div class="micro-text pull-left">
                                             <i class="icon-time">
