@@ -1,11 +1,21 @@
 <?php
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use yii\web\View;
 ?>
 
 <?php
 	$this->registerCssFile('@web/css/font-awesome.min.css');
 	$this->registerCssFile('@web/css/Markdown.Editor.css');
+	$this->registerCssFile('@web/css/select2.css');
+
+	$this->registerJsFile('@web/js/Markdown.Converter.js', [], ['position' => View::POS_END]);
+	$this->registerJsFile('@web/js/Markdown.Editor.js', [], ['position' => View::POS_END]);
+	$this->registerJsFile('@web/js/Markdown.Sanitizer.js', [], ['position' => View::POS_END]);
+
+
+	$this->registerJsFile('@web/js/select2.js', [Yii::$app->params['appAssetPath']], ['position' => View::POS_END]);
+	$this->registerJsFile('@web/js/answers.js', [Yii::$app->params['appAssetPath']], ['position' => View::POS_END]);
 ?>
 
 <div class="row">
@@ -39,23 +49,22 @@ use yii\helpers\Html;
 	    <br>
 	    <div id="wmd-preview" class="well well-content wmd-panel wmd-preview"></div>
 
+	    <div id="tag-select">
+		    <?= $form->field($model, '_tags', [
+		    	'template'	=> "<div class=\"col-lg-12\">{input}</div><div class=\"col-lg-12 text-right\">{error}</div>",
+		       	'inputOptions'	=> [
+		       		'id'			=> 'select2',
+		       		'class'			=> '',
+	        	],
+		    ]) ?>
+	    </div>
+	    <br>
 	    <div class="form-group text-right">
 	        <div class="col-lg-12">
-	            <?= Html::submitButton('Post this Question', ['class' => 'btn btn-info', 'name' => 'register-button']) ?>
+	            <?= Html::submitButton('Post this Question', ['class' => 'btn btn-info']) ?>
 	        </div>
 	    </div>
 
 	    <?php ActiveForm::end(); ?>
 	</div>
 </div>
-
-<?php
-	$this->registerJsFile('@web/js/Markdown.Converter.js');
-	$this->registerJsFile('@web/js/Markdown.Editor.js');
-	$this->registerJsFile('@web/js/Markdown.Sanitizer.js');
-	$this->registerJs('
-		var converter1 = Markdown.getSanitizingConverter();
-	    var editor1 = new Markdown.Editor(converter1);
-	    editor1.run();
-		');
-?>

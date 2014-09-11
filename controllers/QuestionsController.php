@@ -7,6 +7,8 @@ use app\models\Question;
 use app\models\Answer;
 use app\models\Guest;
 use app\models\Comment;
+use app\models\Tag;
+use app\models\QuestionTag;
 
 class QuestionsController extends \yii\web\Controller
 {
@@ -36,7 +38,13 @@ class QuestionsController extends \yii\web\Controller
         /**
         * Questions and answer from guest form logged in user
         */
-        $model = Question::find()->with('comments')->where(['id' => Yii::$app->request->getQueryParam('id')])->one();
+        $model = Question::find()->with(
+            [
+                'comments',
+                'tags' => function($query){
+                    $query->select(['id', 'name']);
+                }
+            ])->where(['id' => Yii::$app->request->getQueryParam('id')])->one();
         
         $answerModel = new Answer();
         $guestModel = new Guest();
@@ -79,5 +87,29 @@ class QuestionsController extends \yii\web\Controller
         else{
             return $this->actionView($commentsModel);
         }
+    }
+
+    public function actionGetTags(){
+        Yii::$app->response->format = 'json';
+        $q;
+
+        $result = Tag::find()->where('name LIKE "%'.($q = Yii::$app->request->getQueryParam('q')).'%"')->orderBy('name')->all();
+        if(!$this->in_array($q, $result, 'name')){
+            array_push($result, ['id' => "0", 'name' => $q]);
+        }
+        return $result;
+    }
+
+    private function in_array($needle, $haystack, $field){
+        foreach ($haystack as $key => $value) {
+            $diff = strcmp(strtolower($needle), $value[$field]);
+            if($diff == 0){
+                return true;
+            }
+            else if($diff > 0){
+                return false;
+            }
+        }
+        return false;
     }
 }

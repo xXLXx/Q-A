@@ -29,6 +29,9 @@ class ProfileController extends \yii\web\Controller
         $menu = 'questions';
         $dataProvider = new ActiveDataProvider([
             'query'         => Question::find()->leftJoin('answers', 'question_id = questions.id')
+                                ->with(['tags' => function($query){
+                                    $query->select(['id', 'name']);
+                                }])
                                 ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
                                 ->where(['questions.user_id' => Yii::$app->user->identity->id])
                                 ->groupBy('questions.id')

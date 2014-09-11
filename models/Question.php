@@ -20,6 +20,7 @@ use app\models\Answer;
 class Question extends \yii\db\ActiveRecord
 {
     public $answers_cnt = 0;
+    public $_tags;
     /**
      * @inheritdoc
      */
@@ -34,7 +35,7 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question', 'title'], 'required', 'on' => 'add'],
+            [['question', 'title', '_tags'], 'required', 'on' => 'add'],
             [['question', 'title'], 'string'],
             ['votes', 'default', 'value' => 0],
             ['user_id', 'default', 'value' => Yii::$app->user->identity->id],
@@ -62,11 +63,43 @@ class Question extends \yii\db\ActiveRecord
     public function add(){
         if ($this->validate()) {
             if ($this && $this->save()) {
-                return true;
+                if($this->addTags()){
+                    return true;
+                }
+                else{
+                    return false;
+                }
             } else {
                 // Yii::$app->getResponse()->redirect('login');
             }
         }
+    }
+
+    public function addTags(){
+        foreach (explode(',', $this->_tags) as $key => $value) {
+            $questionTag = new QuestionTag();
+            $questionTag->link('question', $this);
+            
+            $tagData = explode(':', $value);
+            if($tagData[0] == 0){
+                $tag = new Tag();
+                $tag->name = $tagData[1];
+                if($tag->save()){
+                    $questionTag->link('tag', $tag);
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                $questionTag->tag_id = $tagData[0];
+            }
+
+            if(!$questionTag->save()){
+                return false;
+            }
+        }
+        return true;
     }
 
     public function behaviors(){
@@ -85,5 +118,10 @@ class Question extends \yii\db\ActiveRecord
 
     public function getComments(){
         return $this->hasMany(Comment::className(), ['for_id' => 'id'])->where(['comment_for' => Comment::COMMENT_FOR_QUESTION]);
+    }
+
+    public function getTags(){
+        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])
+            ->viaTable('question_tags', ['question_id' => 'id']);
     }
 }

@@ -123,9 +123,25 @@ class SiteController extends Controller
 
     public function actionNewest(){
         $menu = 'newest';
+        // $question = Question::find()
+        //                 ->with(['user' => function($query){
+        //                     $query->select('name');
+        //                 }, 'answers' => function($query){
+        //                     $query->count();
+        //                 }])
+        //                 ->groupBy('questions.id')
+        //                 ->orderBy(['created_at' => SORT_DESC])->all();
+        // var_dump($question[0]->answers); exit();
         $dataProvider = new ActiveDataProvider([
             'query' => Question::find()->leftJoin('answers', 'question_id = questions.id')
-                        ->with('user')
+                        ->with([
+                            'user' => function($query){
+                                $query->select(['id', 'name']);
+                            },
+                            'tags' => function($query){
+                                $query->select(['id', 'name']);
+                            }
+                        ])
                         ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
                         ->groupBy('questions.id')
                         ->orderBy(['created_at' => SORT_DESC]),
@@ -141,6 +157,14 @@ class SiteController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Question::find()
                         ->leftJoin('answers', 'question_id = questions.id')
+                        ->with([
+                            'user' => function($query){
+                                $query->select(['id', 'name']);
+                            },
+                            'tags' => function($query){
+                                $query->select(['id', 'name']);
+                            }
+                        ])
                         ->select('COUNT(answers.id) AS answers_cnt, questions.*')
                         ->groupBy('questions.id')
                         ->orderBy(['votes' => SORT_DESC]),
@@ -155,6 +179,14 @@ class SiteController extends Controller
         $menu = 'frequent';
         $dataProvider = new ActiveDataProvider([
             'query' => Question::find()->leftJoin('answers', 'question_id = questions.id')
+                        ->with([
+                            'user' => function($query){
+                                $query->select(['id', 'name']);
+                            },
+                            'tags' => function($query){
+                                $query->select(['id', 'name']);
+                            }
+                        ])
                         ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
                         ->groupBy('questions.id')
                         ->orderBy(['answers_cnt' => SORT_DESC]),
@@ -179,7 +211,16 @@ class SiteController extends Controller
     public function actionUnanswered(){
         $menu = 'unanswered';
         $dataProvider = new ActiveDataProvider([
-            'query' => Question::find()->where([
+            'query' => Question::find()
+                        ->with([
+                            'user' => function($query){
+                                $query->select(['id', 'name']);
+                            },
+                            'tags' => function($query){
+                                $query->select(['id', 'name']);
+                            }
+                        ])
+                        ->where([
                             'not in', 
                             'id', Answer::find()->select('question_id')->distinct()
                         ])->orderBy(['created_at' => SORT_DESC]),

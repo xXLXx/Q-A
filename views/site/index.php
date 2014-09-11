@@ -28,6 +28,11 @@ $this->title = 'Q-A';
                         echo ListView::widget([
                             'dataProvider'  => $dataProvider,
                             'itemView'      => function ($model, $key, $index, $widget){
+                                $tags = '';
+                                foreach ($model->tags as $key => $value) {
+                                    $tags .= '<a href="" class="tag"><small>'.$value->name.'</small></a>';
+                                }
+
                                 return
                                     '<div class="row question-list-item">
                                         <div class="col-xs-1 dash-column-right">
@@ -45,6 +50,7 @@ $this->title = 'Q-A';
                                         <div class="col-xs-10">
                                             <h4>'.Html::a($model->title, '@web/questions/'.$model->id).'</h4>
                                             <p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->question), 30)).'</p>
+                                            '.$tags.'
                                             <div class="pull-right col-xs-3">
                                                 <div class="micro-text pull-left">
                                                     <i class="icon-time">

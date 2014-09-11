@@ -62,6 +62,13 @@ use yii\helpers\Inflector;
             echo ListView::widget([
                 'dataProvider'  => $dataProvider,
                 'itemView'      => function ($model, $key, $index, $widget) use($menu){
+                    $tags = '';
+                    if($menu == 'questions'){
+                       foreach ($model->tags as $key => $value) {
+                            $tags .= '<a href="" class="tag"><small>'.$value->name.'</small></a>';
+                        } 
+                    }
+
                     return
                         '<div class="row question-list-item">
                             <div class="col-xs-1 dash-column-right">
@@ -83,6 +90,7 @@ use yii\helpers\Inflector;
                                     Html::a($model->question->title, '@web/questions/'.$model->question->id)
                                 ).'</h4>'
                                 .'<p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->{Inflector::singularize($menu)}), 30)).'</p>
+                                '.$tags.'
                                 <div class="micro-text">
                                     <i class="icon-time pull-right">
                                         <small> asked '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
