@@ -439,3 +439,31 @@ a.desc:after {
 .tag:hover{
     text-decoration: none;
 }
+
+/* Search Styles */
+.nav-search input {
+    width: 0;
+    height: 50px;
+    padding: 0 0 0 40px;
+    color: #BBB;
+    outline: 0;
+    margin: 0 3px 0 0;
+    font-size: 12px;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+    background: url('../img/search.png') 0 13px  no-repeat; 
+    border: 0;
+    -webkit-filter: invert(.7);
+    filter: invert(.7);
+    position: absolute;
+    right: 0px;
+}
+
+.nav-search input:active,
+.nav-search input:focus {
+    width: 185px;
+    padding-right: 10px;
+}

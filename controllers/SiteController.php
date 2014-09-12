@@ -123,6 +123,7 @@ class SiteController extends Controller
     }
 
     public function actionNewest(){
+        $filter = Yii::$app->request->getQueryParam('filter') ? Yii::$app->request->getQueryParam('filter') : '';
         $menu = 'newest';
         // $question = Question::find()
         //                 ->with(['user' => function($query){
@@ -144,6 +145,8 @@ class SiteController extends Controller
                             }
                         ])
                         ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
+                        ->where('questions.title LIKE :filter OR questions.question LIKE :filter',
+                            [':filter' => '%'.$filter.'%'])
                         ->groupBy('questions.id')
                         ->orderBy(['created_at' => SORT_DESC]),
             'pagination' => [
@@ -154,6 +157,7 @@ class SiteController extends Controller
     }
 
     public function actionFeatured(){
+        $filter = Yii::$app->request->getQueryParam('filter') ? Yii::$app->request->getQueryParam('filter') : '';
         $menu = 'featured';
         $dataProvider = new ActiveDataProvider([
             'query' => Question::find()
@@ -167,6 +171,8 @@ class SiteController extends Controller
                             }
                         ])
                         ->select('COUNT(answers.id) AS answers_cnt, questions.*')
+                        ->where('questions.title LIKE :filter OR questions.question LIKE :filter',
+                            [':filter' => '%'.$filter.'%'])
                         ->groupBy('questions.id')
                         ->orderBy(['votes' => SORT_DESC]),
             'pagination' => [
@@ -177,6 +183,7 @@ class SiteController extends Controller
     }
 
     public function actionFrequent(){
+        $filter = Yii::$app->request->getQueryParam('filter') ? Yii::$app->request->getQueryParam('filter') : '';
         $menu = 'frequent';
         $dataProvider = new ActiveDataProvider([
             'query' => Question::find()->leftJoin('answers', 'question_id = questions.id')
@@ -189,6 +196,8 @@ class SiteController extends Controller
                             }
                         ])
                         ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
+                        ->where('questions.title LIKE :filter OR questions.question LIKE :filter',
+                            [':filter' => '%'.$filter.'%'])
                         ->groupBy('questions.id')
                         ->orderBy(['answers_cnt' => SORT_DESC]),
             'pagination' => [
@@ -199,11 +208,13 @@ class SiteController extends Controller
     }
 
     public function actionTags(){
+        $filter = Yii::$app->request->getQueryParam('filter') ? Yii::$app->request->getQueryParam('filter') : '';
         $menu = 'tags';
         $dataProvider = new ActiveDataProvider([
             'query' => Tag::find()
                         ->leftJoin('question_tags', 'tag_id = tags.id')
                         ->select(['COUNT(tag_id) AS instance_cnt', 'tags.*'])
+                        ->where('tags.name LIKE :filter', [':filter' => '%'.$filter.'%'])
                         ->groupBy('tag_id')
                         ->orderBy(['instance_cnt' => SORT_DESC]),
             'pagination' => [
@@ -214,6 +225,7 @@ class SiteController extends Controller
     }
 
     public function actionUnanswered(){
+        $filter = Yii::$app->request->getQueryParam('filter') ? Yii::$app->request->getQueryParam('filter') : '';
         $menu = 'unanswered';
         $dataProvider = new ActiveDataProvider([
             'query' => Question::find()
@@ -228,7 +240,10 @@ class SiteController extends Controller
                         ->where([
                             'not in', 
                             'id', Answer::find()->select('question_id')->distinct()
-                        ])->orderBy(['created_at' => SORT_DESC]),
+                        ])
+                        ->andWhere('questions.title LIKE :filter OR questions.question LIKE :filter',
+                            [':filter' => '%'.$filter.'%'])
+                        ->orderBy(['created_at' => SORT_DESC]),
             'pagination' => [
                 'pageSize' => 10,
             ],

@@ -16,6 +16,11 @@ $this->title = 'Q-A';
                     'class' => 'btn btn-success btn-top-right'
                     ]);
                 ?>
+                <ul class="nav pull-right search">
+                    <form class="nav-search" action="">
+                        <input type="text" name="filter">
+                    </form>
+                </ul>
                 <?= Nav::widget([
                         'items'     => NavItemsGenerator::generateNavItems(['newest', 'featured', 'frequent', 'tags', 'unanswered'], $menu),
                         'options'   => ['class' => 'nav nav-pills']

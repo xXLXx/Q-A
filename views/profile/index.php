@@ -49,6 +49,11 @@ use yii\helpers\Inflector;
 <br/>
 <div class="row">
     <div class="col-xs-10 col-xs-offset-1">
+        <ul class="nav pull-right search">
+            <form class="nav-search" action="">
+                <input type="text" name="filter">
+            </form>
+        </ul>
         <?= Nav::widget([
             'items'         => NavItemsGenerator::generateNavItems(['questions', 'answers', 'tags'], $menu, true),
             'options'       => ['class' => 'nav nav-tabs'],

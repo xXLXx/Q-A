@@ -26,6 +26,7 @@ class ProfileController extends \yii\web\Controller
     }
 
     public function actionQuestions(){
+        $filter = Yii::$app->request->getQueryParam('filter') ? Yii::$app->request->getQueryParam('filter') : '';
         $menu = 'questions';
         $dataProvider = new ActiveDataProvider([
             'query'         => Question::find()->leftJoin('answers', 'question_id = questions.id')
@@ -34,6 +35,8 @@ class ProfileController extends \yii\web\Controller
                                 }])
                                 ->select(['COUNT(answers.id) AS answers_cnt', 'questions.*'])
                                 ->where(['questions.user_id' => Yii::$app->user->identity->id])
+                                ->andWhere('questions.title LIKE :filter OR questions.question LIKE :filter',
+                                    [':filter' => '%'.$filter.'%'])
                                 ->groupBy('questions.id')
                                 ->orderBy(['created_at' => SORT_DESC]),
             'pagination'    => [
@@ -44,6 +47,7 @@ class ProfileController extends \yii\web\Controller
     }
 
     public function actionAnswers(){
+        $filter = Yii::$app->request->getQueryParam('filter') ? Yii::$app->request->getQueryParam('filter') : '';
         $menu = 'answers';
         $dataProvider = new ActiveDataProvider([
             'query'         => Answer::find()
@@ -52,6 +56,7 @@ class ProfileController extends \yii\web\Controller
                                     'user_id' => Yii::$app->user->identity->id,
                                     'user_group' => Answer::USER_GROUP_USER
                                     ])
+                                ->andWhere('answers.answer LIKE :filter', [':filter' => '%'.$filter.'%'])
                                 ->orderBy(['created_at' => SORT_DESC]),
             'pagination'    => [
                 'pageSize'      => 10,
