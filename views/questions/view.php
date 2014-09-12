@@ -33,7 +33,6 @@ use yii\web\View;
                         echo Html::a('<span class="glyphicon glyphicon-chevron-down vote" data-id="'.$model->id.
                             '" data-vote="-1" data-for="'.UserVote::VOTE_FOR_QUESTION.'"></span>', '');
                     ?>
-
                 </div>
                 <div class="col-xs-11">
                     <p><?= Markdown::process($model->question) ?></p>
@@ -75,6 +74,7 @@ use yii\web\View;
             ?>
             <br>
             <?php
+                $questionBestAnswer = $model->best_answer;
                 echo ListView::widget([
                     'dataProvider'  =>
                         new ActiveDataProvider([
@@ -82,9 +82,10 @@ use yii\web\View;
                                             $query->select(['id', 'name']);
                                         }, 'guest', 'comments'])->where(['question_id' => $model->id]),
                         ]),
-                    'itemView'      => function ($model, $key, $index, $widget) use($commentsModel){
+                    'itemView'      => function ($model, $key, $index, $widget) use($commentsModel, $questionBestAnswer){
                         $addAComment = '';
                         $heading = '';
+                        $bestAnswer = '';
 
                         /**
                         * Add a Comment
@@ -112,6 +113,18 @@ use yii\web\View;
                             $heading = '<h4><span class="label label-success">'.$widget->dataProvider->pagination->totalCount.'</span> Answers</h4>';
                         }
 
+                        /**
+                        * Best Answer
+                        */
+                        if($model->id == $questionBestAnswer){
+                            $bestAnswer = '<span class="glyphicon glyphicon-ok check-best"></span>';
+                        }
+                        else if(!Yii::$app->user->isGuest){
+                            $bestAnswer = '<span class="glyphicon glyphicon-ok check-default" data-id="'.
+                                $model->id.'" data-q="'.Yii::$app->request->getQueryParam('id').'"></span>';
+                        }
+                        
+
                         return
                             $heading.'
                             <hr>
@@ -122,6 +135,7 @@ use yii\web\View;
                                     '<span class="vote_cnt">'.$model->votes.'</span>'.
                                     Html::a('<span class="glyphicon glyphicon-chevron-down vote" data-id="'.$model->id.
                                         '" data-vote="-1" data-for="'.UserVote::VOTE_FOR_ANSWER.'"></span>', '').
+                                    $bestAnswer.
                                 '</div>
                                 <div class="col-xs-11">
                                     <p>'.Markdown::process($model->answer).'</p>

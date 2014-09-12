@@ -467,3 +467,16 @@ a.desc:after {
     width: 185px;
     padding-right: 10px;
 }
+
+/**
+* Best Answer
+*/
+.check-best,
+.check-default:hover{
+    color: #5cb85c;
+}
+
+.check-default{
+    color: #AAA;
+    cursor: pointer;
+}

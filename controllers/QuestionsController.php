@@ -105,6 +105,18 @@ class QuestionsController extends \yii\web\Controller
         return $result;
     }
 
+    public function actionSelectBest(){
+        Yii::$app->response->format = 'json';
+        $model = Question::findOne(Yii::$app->request->getQueryParam('questionId'));
+        $model->best_answer = Yii::$app->request->getQueryParam('bestId');
+        if($model->save()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     private function in_array($needle, $haystack, $field){
         foreach ($haystack as $key => $value) {
             $diff = strcmp(strtolower($needle), $value[$field]);
