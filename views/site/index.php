@@ -30,7 +30,7 @@ $this->title = 'Q-A';
                             'itemView'      => function ($model, $key, $index, $widget){
                                 $tags = '';
                                 foreach ($model->tags as $key => $value) {
-                                    $tags .= '<a href="" class="tag"><small>'.$value->name.'</small></a>';
+                                    $tags .= '<a href="" class="tag pull-left"><small>'.$value->name.'</small></a>';
                                 }
 
                                 return

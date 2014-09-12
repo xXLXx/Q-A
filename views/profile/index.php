@@ -65,7 +65,7 @@ use yii\helpers\Inflector;
                     $tags = '';
                     if($menu == 'questions'){
                        foreach ($model->tags as $key => $value) {
-                            $tags .= '<a href="" class="tag"><small>'.$value->name.'</small></a>';
+                            $tags .= '<a href="" class="tag pull-left"><small>'.$value->name.'</small></a>';
                         } 
                     }
 

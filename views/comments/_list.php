@@ -4,10 +4,18 @@ use yii\data\ActiveDataProvider;
 use app\models\Comment;
 use yii\helpers\Markdown;
 use yii\helpers\Html;
+use yii\helpers\Url;
 ?>
 
 <?php
-    $pageSize = isset($pageSize) ? $pageSize : 3;
+    $pageSize = 3;
+    $expand = Yii::$app->request->getQueryParam('expand');
+    if(isset($expand)){
+        if(($expand == 0 and $commentFor == Comment::COMMENT_FOR_QUESTION) or ($expand and $commentId == $expand)){
+            $pageSize = 100;
+        }
+    }
+
     echo ListView::widget([
                     'dataProvider'  =>
                         new ActiveDataProvider([
@@ -20,11 +28,12 @@ use yii\helpers\Html;
                                 'pageSize' => $pageSize,
                             ],
                         ]),
-                    'itemView' => function ($model, $key, $index, $widget) use($pageSize){
+                    'itemView' => function ($model, $key, $index, $widget) use($pageSize, $commentFor, $commentId){
                         $showMore = '';
-                        if($index == $pageSize - 1){
-                            $showMore = '<br><br>'.Html::a('Show '.($widget->dataProvider->pagination->totalCount - $pageSize).' more',
-                                            Yii::$app->request->absoluteUrl,
+                        if($index == $pageSize - 1 && $widget->dataProvider->pagination->totalCount - $pageSize){
+                            $showMore = '<br><br>'.Html::a('<small>Show '.($widget->dataProvider->pagination->totalCount - $pageSize).
+                                            ' more</small>',
+                                            Url::to([Yii::$app->request->pathInfo, 'expand' => ($commentFor == Comment::COMMENT_FOR_QUESTION ? 0 : $commentId)]),
                                             ['class' => 'comment-link']);
                         }
                         return

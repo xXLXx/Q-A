@@ -70,13 +70,18 @@ class QuestionsController extends \yii\web\Controller
     }
 
     public function actionComment(){
-        $answerId;
+
+        $answerId = Yii::$app->request->getQueryParam('answerId');
         /**
         * Comments
         */
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(($answerId == null ? '../' : '../../').Yii::$app->request->getQueryParam('id'));
+        }
+
         $commentsModel = new Comment();
-        $commentsModel->comment_for = ($answerId = Yii::$app->request->getQueryParam('answerId')) == null ?
-            Comment::COMMENT_FOR_QUESTION : Comment::COMMENT_FOR_ANSWER;
+        $commentsModel->comment_for = ($answerId  == null ?
+            Comment::COMMENT_FOR_QUESTION : Comment::COMMENT_FOR_ANSWER);
         $commentsModel->for_id = $commentsModel->comment_for == Comment::COMMENT_FOR_QUESTION ?
             Yii::$app->request->getQueryParam('id') : $answerId;
 

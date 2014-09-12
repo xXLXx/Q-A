@@ -7,9 +7,14 @@ use app\models\Answer;
 use app\models\Comment;
 use yii\widgets\ListView;
 use yii\data\ActiveDataProvider;
+use app\models\UserVote;
+use yii\web\View;
 
 ?>
 
+<?php
+    $this->registerJsFile('@web/js/votes.js', [Yii::$app->params['appAssetPath']], ['position' => View::POS_END]);
+?>
 <div class="row">
     <div class="col-xs-10 col-xs-offset-1">
         <div id="view-question" class="bs-example" data-content="<?= $model->title ?>">
@@ -22,16 +27,18 @@ use yii\data\ActiveDataProvider;
             <div class="row">
                 <div class="col-xs-1 text-center vote-block">
                     <?php
-                        echo Html::a('<span class="glyphicon glyphicon-chevron-up"></span>', '');
-                        echo $model->votes;
-                        echo Html::a('<span class="glyphicon glyphicon-chevron-down"></span>', '');
+                        echo Html::a('<span class="glyphicon glyphicon-chevron-up vote" data-id="'.$model->id.
+                            '" data-vote="1" data-for="'.UserVote::VOTE_FOR_QUESTION.'"></span>', '');
+                        echo '<span class="vote_cnt">'.$model->votes.'</span>';
+                        echo Html::a('<span class="glyphicon glyphicon-chevron-down vote" data-id="'.$model->id.
+                            '" data-vote="-1" data-for="'.UserVote::VOTE_FOR_QUESTION.'"></span>', '');
                     ?>
 
                 </div>
                 <div class="col-xs-11">
                     <p><?= Markdown::process($model->question) ?></p>
                     <?php foreach ($model->tags as $key => $value): ?>
-                        <a href="" class="tag"><small><?= $value->name ?></small></a>
+                        <a href="" class="tag pull-left"><small><?= $value->name ?></small></a>
                     <?php endforeach;?>
                     <div class="pull-right col-xs-3">
                         <div class="micro-text pull-left">
@@ -110,9 +117,11 @@ use yii\data\ActiveDataProvider;
                             <hr>
                             <div class="row">
                                 <div class="col-xs-1 text-center vote-block">'.
-                                    Html::a('<span class="glyphicon glyphicon-chevron-up"></span>', '').
-                                    $model->votes.
-                                    Html::a('<span class="glyphicon glyphicon-chevron-down"></span>', '').
+                                    Html::a('<span class="glyphicon glyphicon-chevron-up vote" data-id="'.$model->id.
+                                        '" data-vote="1" data-for="'.UserVote::VOTE_FOR_ANSWER.'"></span>', '').
+                                    '<span class="vote_cnt">'.$model->votes.'</span>'.
+                                    Html::a('<span class="glyphicon glyphicon-chevron-down vote" data-id="'.$model->id.
+                                        '" data-vote="-1" data-for="'.UserVote::VOTE_FOR_ANSWER.'"></span>', '').
                                 '</div>
                                 <div class="col-xs-11">
                                     <p>'.Markdown::process($model->answer).'</p>
