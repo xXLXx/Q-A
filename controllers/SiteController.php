@@ -12,6 +12,7 @@ use app\models\User;
 use yii\data\ActiveDataProvider;
 use app\models\Answer;
 use yii\helpers\Url;
+use app\models\Tag;
 
 class SiteController extends Controller
 {
@@ -200,12 +201,16 @@ class SiteController extends Controller
     public function actionTags(){
         $menu = 'tags';
         $dataProvider = new ActiveDataProvider([
-            'query' => Question::find()->orderBy('created_at'),
+            'query' => Tag::find()
+                        ->leftJoin('question_tags', 'tag_id = tags.id')
+                        ->select(['COUNT(tag_id) AS instance_cnt', 'tags.*'])
+                        ->groupBy('tag_id')
+                        ->orderBy(['instance_cnt' => SORT_DESC]),
             'pagination' => [
                 'pageSize' => 10,
             ],
         ]);
-        return $this->render('index', compact('menu'));
+        return $this->render('index', compact('menu', 'dataProvider'));
     }
 
     public function actionUnanswered(){

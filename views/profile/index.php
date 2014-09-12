@@ -87,9 +87,9 @@ use yii\helpers\Inflector;
                             <div class="col-xs-10">'.
                                 '<h4>'.($menu != 'answers' ?
                                     Html::a($model->title, '@web/questions/'.$model->id) :
-                                    Html::a($model->question->title, '@web/questions/'.$model->question->id)
-                                ).'</h4>'
-                                .'<p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->{Inflector::singularize($menu)}), 30)).'</p>
+                                    Html::a($model->question->title, '@web/questions/'.$model->question->id)).
+                                '</h4>'.
+                                '<p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->{Inflector::singularize($menu)}), 30)).'</p>
                                 '.$tags.'
                                 <div class="micro-text">
                                     <i class="icon-time pull-right">

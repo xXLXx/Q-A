@@ -24,18 +24,24 @@ $this->title = 'Q-A';
             </div>
             <div class="highlight">
                 <?php
+                    /**
+                    * For Not Tags Only
+                    */
                     if(isset($dataProvider)){
                         echo ListView::widget([
                             'dataProvider'  => $dataProvider,
-                            'itemView'      => function ($model, $key, $index, $widget){
+                            'itemView'      => function ($model, $key, $index, $widget) use($menu){
                                 $tags = '';
-                                foreach ($model->tags as $key => $value) {
-                                    $tags .= '<a href="" class="tag pull-left"><small>'.$value->name.'</small></a>';
+                                if(isset($model->tags)){
+                                    foreach ($model->tags as $key => $value) {
+                                        $tags .= '<a href="" class="tag pull-left"><small>'.$value->name.'</small></a>';
+                                    }
                                 }
 
                                 return
-                                    '<div class="row question-list-item">
-                                        <div class="col-xs-1 dash-column-right">
+                                    '<div class="row question-list-item">'.
+                                        ($menu == 'tags' ? '' :
+                                        '<div class="col-xs-1 dash-column-right">
                                             <div class="well">
                                                 <div class="title recent-right">
                                                     <h4>'.$model->votes.'</h4>
@@ -46,12 +52,19 @@ $this->title = 'Q-A';
                                                     <span>answers</span>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xs-10">
-                                            <h4>'.Html::a($model->title, '@web/questions/'.$model->id).'</h4>
-                                            <p>'.strip_tags(TextLimiter::limitByWords(Markdown::process($model->question), 30)).'</p>
-                                            '.$tags.'
-                                            <div class="pull-right col-xs-3">
+                                        </div>').
+                                        '<div class="col-xs-10">
+                                            <h4>'.($menu == 'tags' ?
+                                                    Html::a(ucwords($model->name), '').'<small> &times; '.$model->instance_cnt.'</small>' : 
+                                                    Html::a($model->title, '@web/questions/'.$model->id)).
+                                            '</h4>'.
+                                            '<p>'.($menu == 'tags' ?
+                                                    'The defintion goes here from google.' : 
+                                                    strip_tags(TextLimiter::limitByWords(Markdown::process($model->question), 30))).
+                                            '</p>'.
+                                            $tags.
+                                            ($menu == 'tags' ? '' :
+                                            '<div class="pull-right col-xs-3">
                                                 <div class="micro-text pull-left">
                                                     <i class="icon-time">
                                                         <small> asked '.Yii::$app->formatter->asRelativeTime($model->updated_at).'</small>
@@ -62,8 +75,8 @@ $this->title = 'Q-A';
                                                     </div>
                                                     <small class="user-name">'.$model->user->name.'</small>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </div>').
+                                        '</div>
                                     </div>';
                             },
                             'layout'        => "{items}\n{pager}",

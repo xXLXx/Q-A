@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use app\models\Tag;
 
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -161,7 +162,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     public function getTagsCount(){
-        return 0;
+        return QuestionTag::find()->with(['question' => function($query){
+            $query->select(['id'])->where(['user_id' => $this->id]);
+        }])->groupBy('tag_id')->count();
     }
 
     public function behaviors(){

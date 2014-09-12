@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\QuestionTag;
 
 /**
  * This is the model class for table "tags".
@@ -12,6 +13,7 @@ use Yii;
  */
 class Tag extends \yii\db\ActiveRecord
 {
+    public $instance_cnt = 0;
     /**
      * @inheritdoc
      */
@@ -40,5 +42,9 @@ class Tag extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
         ];
+    }
+
+    public function getQuestionTags(){
+        return $this->hasMany(QuestionTag::className(), ['tag_id' => 'id']);
     }
 }
